@@ -1,0 +1,24 @@
+name: Build 32-bit Windows app
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up MSBuild
+        uses: microsoft/setup-msbuild@v2
+
+      - name: Build Release x86
+        run: msbuild Toolbox.sln /m /p:Configuration=Release /p:Platform=x86
+
+      - name: Upload application
+        uses: actions/upload-artifact@v4
+        with:
+          name: Switch-Toolbox-x86
+          path: Toolbox/bin/Release/x86/
+          if-no-files-found: error
